@@ -21,6 +21,7 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->name(),
             'desc' => fake()->text(),
+            'user_id' => random_int(1,9),
         ];
     }
 }

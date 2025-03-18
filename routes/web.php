@@ -1,12 +1,15 @@
 <?php
 
-use App\Events\TaskUpdated;
 use Illuminate\Support\Facades\Route;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+Route::view('/', 'welcome');
 
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
 
+require __DIR__.'/auth.php';

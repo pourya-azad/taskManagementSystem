@@ -31,5 +31,5 @@ class criticalJob implements ShouldQueue
     public function handle(): void
     {
         event(new TaskUpdated($this->task->title));
-    }
+    } 
 }

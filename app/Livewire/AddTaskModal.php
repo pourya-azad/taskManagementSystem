@@ -74,7 +74,7 @@ class AddTaskModal extends Component
                 'created_at' => $validated['taskDueDate'],
                 'status' => $this->status,
             ]);
-
+ 
         } elseif ($this->mode === 'edit') {
             // آیتم موجود را آپدیت کن
             $task = Task::find($this->itemId);

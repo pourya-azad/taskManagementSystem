@@ -18,6 +18,9 @@ return new class extends Migration
             $table->enum('priority', ['high', 'medium', 'low'])->default('medium');
             $table->enum('status', ['toDo', 'inProgress', 'done'])->default('toDo');
             $table->timestamps();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
