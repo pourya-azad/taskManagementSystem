@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\TaskStatus;
 use App\Events\reRender;
 use App\Events\TaskUpdated;
 use App\Models\Task;
@@ -55,7 +56,7 @@ class TaskManagment extends Component
     {
         try {
             Task::findOrFail($id)->delete();
-        }catch (Exception $e){
+        }catch (\Exception $e){
             Log::error($e);
 
             $this->alert('error', 'خطا', [
@@ -90,9 +91,9 @@ class TaskManagment extends Component
     public function render()
     {
         $tasks = array(
-            'toDo'=> Task::where('status', 'toDo')->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 when 'low' then 3 end")->get(),
-            'inProgress'=> Task::where('status', 'inProgress')->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 when 'low' then 3 end")->get(),
-            'done'=>  Task::where('status', 'done')->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 when 'low' then 3 end")->get(),
+            TaskStatus::TODO => Task::where('status', TaskStatus::TODO)->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 when 'low' then 3 end")->get(),
+            TaskStatus::INPROGRESS => Task::where('status', TaskStatus::INPROGRESS)->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 when 'low' then 3 end")->get(),
+            TaskStatus::DONE =>  Task::where('status', TaskStatus::DONE )->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 when 'low' then 3 end")->get(),
         );
 
         return view('livewire.task-managment', compact('tasks'));

@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Enums\TaskPriority;
+use App\Enums\TaskStatus;
 use App\Events\TaskUpdated;
 use App\Jobs\criticalJob;
 use App\Models\Task;
@@ -38,13 +40,13 @@ class AddTaskModal extends Component
         if ($arr[0] === 'create'){
             switch ($arr[1]){
                 case 0:
-                    $this->status = 'toDo';
+                    $this->status = TaskStatus::TODO;
                     break;
                 case 1:
-                    $this->status = 'inProgress';
+                    $this->status = TaskStatus::INPROGRESS;
                     break;
                 case 2:
-                    $this->status = 'done';
+                    $this->status = TaskStatus::DONE;
                     break;
             }
         } else {
@@ -77,7 +79,7 @@ class AddTaskModal extends Component
  
         } elseif ($this->mode === 'edit') {
             // آیتم موجود را آپدیت کن
-            $task = Task::find($this->itemId);
+            $task = Task::findOrFail($this->itemId);
 
             $task->update([
             'title' => $validated['taskTitle'],
@@ -87,11 +89,8 @@ class AddTaskModal extends Component
             ]);
         }
 
-        if ($task->priority === 'high')
-            dispatch((new criticalJob($task)))->onQueue('critical');
-        else
-            dispatch((new criticalJob($task)))->onQueue('default');
-
+        $queue = $task->priority === TaskPriority::HIGH ? "critical" : "default";
+        dispatch((new criticalJob($task)))->onQueue($queue);
 
 
         $this->dispatch('taskCreated');
